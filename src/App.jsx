@@ -238,23 +238,23 @@ function Hero() {
 
       {/* Subtitle */}
       <motion.div {...fadeUp(0.35)} style={{ marginBottom: 12 }}>
-        <p className="syne" style={{
-          fontSize: "clamp(16px, 3vw, 22px)",
-          fontWeight: 600, color: C.muted, letterSpacing: "0.01em",
-        }}>
-          Full Stack Developer{" "}
-          <span style={{ color: C.border }}>·</span>{" "}
-          <span style={{ color: C.accent }}>AI Systems Builder</span>
-        </p>
-      </motion.div>
+  <p className="syne" style={{
+    fontSize: "clamp(16px, 3vw, 22px)",
+    fontWeight: 600, color: C.muted, letterSpacing: "0.01em",
+  }}>
+    Computer Science Student{" "}
+    <span style={{ color: C.border }}>·</span>{" "}
+    <span style={{ color: C.accent }}>Building Software Systems</span>
+  </p>
+</motion.div>
 
-      <motion.p {...fadeUp(0.45)} className="mono" style={{
-        fontSize: 13, color: C.subtle, maxWidth: 480, lineHeight: 1.8,
-        marginBottom: 48,
-      }}>
-        // MERN · AI Integration · DSA<br />
-        // Building systems that solve real problems
-      </motion.p>
+<motion.p {...fadeUp(0.45)} className="mono" style={{
+  fontSize: 13, color: C.subtle, maxWidth: 480, lineHeight: 1.8,
+  marginBottom: 48,
+}}>
+  // Systems · AI Integration · DSA<br />
+  // Building software that solves real problems
+</motion.p>
 
       {/* CTAs */}
       <motion.div {...fadeUp(0.55)} style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
