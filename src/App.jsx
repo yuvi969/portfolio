@@ -282,37 +282,41 @@ function Hero() {
 function About() {
   const [ref, inView] = useInViewAnim();
   const lines = [
-    { type: "comment", text: "// whoami.js — last updated 2025" },
-    { type: "blank" },
-    { type: "code", parts: [
-      { t: "keyword", v: "const " }, { t: "var", v: "developer" },
-      { t: "punct", v: " = " }, { t: "punct", v: "{" }
-    ]},
-    { type: "code", indent: 2, parts: [
-      { t: "prop", v: "  name" }, { t: "punct", v: ": " },
-      { t: "string", v: '"Yuvraj Pawar"' }, { t: "punct", v: "," }
-    ]},
-    { type: "code", indent: 2, parts: [
-      { t: "prop", v: "  role" }, { t: "punct", v: ": " },
-      { t: "string", v: '"CS Undergraduate → Full-Stack & AI Engineer"' }, { t: "punct", v: "," }
-    ]},
-    { type: "code", indent: 2, parts: [
-      { t: "prop", v: "  focus" }, { t: "punct", v: ": " },
-      { t: "punct", v: "[" }
-    ]},
-    { type: "code", indent: 4, parts: [{ t: "string", v: '    "OCR pipelines"' }, { t: "punct", v: "," }] },
-    { type: "code", indent: 4, parts: [{ t: "string", v: '    "LLM integration"' }, { t: "punct", v: "," }] },
-    { type: "code", indent: 4, parts: [{ t: "string", v: '    "Scalable MERN backends"' }, { t: "punct", v: "," }] },
-    { type: "code", indent: 4, parts: [{ t: "string", v: '    "System design & optimization"' }] },
-    { type: "code", indent: 2, parts: [{ t: "punct", v: "  ]," }] },
-    { type: "code", indent: 2, parts: [
-      { t: "prop", v: "  currently" }, { t: "punct", v: ": " },
-      { t: "string", v: '"deep in DSA + building in public"' }
-    ]},
-    { type: "code", parts: [{ t: "punct", v: "};" }] },
-    { type: "blank" },
-    { type: "comment", text: "// I build real systems. Shipping > theorizing." },
-  ];
+  { type: "comment", text: "// whoami.js — last updated 2025" },
+  { type: "blank" },
+  { type: "code", parts: [
+    { t: "keyword", v: "const " }, { t: "var", v: "profile" },
+    { t: "punct", v: " = " }, { t: "punct", v: "{" }
+  ]},
+  { type: "code", indent: 2, parts: [
+    { t: "prop", v: "  name" }, { t: "punct", v: ": " },
+    { t: "string", v: '"Yuvraj Pawar"' }, { t: "punct", v: "," }
+  ]},
+  { type: "code", indent: 2, parts: [
+    { t: "prop", v: "  background" }, { t: "punct", v: ": " },
+    { t: "string", v: '"Computer Science student"' }, { t: "punct", v: "," }
+  ]},
+  { type: "code", indent: 2, parts: [
+    { t: "prop", v: "  interests" }, { t: "punct", v: ": [" }
+  ]},
+  { type: "code", indent: 4, parts: [{ t: "string", v: '    "Software systems"' }, { t: "punct", v: "," }] },
+  { type: "code", indent: 4, parts: [{ t: "string", v: '    "AI integration"' }, { t: "punct", v: "," }] },
+  { type: "code", indent: 4, parts: [{ t: "string", v: '    "Problem solving"' }] },
+  { type: "code", indent: 2, parts: [{ t: "punct", v: "  ]," }] },
+  { type: "code", indent: 2, parts: [
+    { t: "prop", v: "  experience" }, { t: "punct", v: ": [" }
+  ]},
+  { type: "code", indent: 4, parts: [{ t: "string", v: '    "React, Node.js, MongoDB, PostgreSQL"' }, { t: "punct", v: "," }] },
+  { type: "code", indent: 4, parts: [{ t: "string", v: '    "APIs, authentication, database design"' }] },
+  { type: "code", indent: 2, parts: [{ t: "punct", v: "  ]," }] },
+  { type: "code", indent: 2, parts: [
+    { t: "prop", v: "  currently" }, { t: "punct", v: ": " },
+    { t: "string", v: '"improving DSA + building projects"' }
+  ]},
+  { type: "code", parts: [{ t: "punct", v: "};" }] },
+  { type: "blank" },
+  { type: "comment", text: "// building, learning, improving." },
+];
 
   return (
     <section id="about" style={{ padding: "100px 24px", maxWidth: 880, margin: "0 auto" }}>
