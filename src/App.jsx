@@ -636,7 +636,7 @@ function Sidebar() {
               <span style={{ fontSize: 14, fontWeight: 500 }}>{item.label}</span>
             </div>
           ))}
-          <p style={{ fontSize: 12, color: C.muted, marginTop: 8 }}>💬 Responds within 24 hours</p>
+          <p style={{ fontSize: 12, color: C.muted, marginTop: 8 }}>I will try to respond ASAP :)</p>
         </div>
       </div>
 
@@ -684,7 +684,7 @@ function Footer() {
             Open to full-time roles, internships, and interesting projects.<br />
             I respond within 24 hours.
           </p>
-          <p style={{ fontSize: 12, color: C.faint, marginTop: 12 }}>© 2025 Yuvraj Pawar · Built with React</p>
+          <p style={{ fontSize: 12, color: C.faint, marginTop: 12 }}>© 2025 Yuvraj Pawar</p>
         </div>
 
         {/* Right: buttons */}
