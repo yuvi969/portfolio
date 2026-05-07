@@ -716,7 +716,7 @@ function Footer() {
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>Let's build something.</h2>
           <p style={{ fontSize: 14, color: "#666", lineHeight: 1.6 }}>
             Open to full-time roles, internships, and interesting projects.<br />
-            I respond within 24 hours.
+            I will respond ASAP :)
           </p>
           <p style={{ fontSize: 12, color: C.faint, marginTop: 12 }}>© 2025 Yuvraj Pawar</p>
         </div>
