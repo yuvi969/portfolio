@@ -426,6 +426,7 @@ function TechStack() {
 // ─── DSA ──────────────────────────────────────────────────────────────────────
 function DSA() {
   const gfgSolved = 267, gfgScore = 759;
+  const gfgSchool = 0, gfgBasic = 34, gfgEasy = 107, gfgMedium = 115, gfgHard = 11;
   const lcEasy = 21, lcMed = 16, lcHard = 3, lcTotal = 40;
   return (
     <div className="card" id="dsa">
@@ -454,11 +455,44 @@ function DSA() {
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-          <span style={{ fontSize: 13, color: C.muted }}>Progress toward 500</span>
+          <span style={{ fontSize: 13, color: C.muted }}>Progress</span>
           <span style={{ fontSize: 13, fontWeight: 600, color: "#2f8d46" }}>{Math.round((gfgSolved/500)*100)}%</span>
         </div>
         <div style={{ height: 6, background: C.divider, borderRadius: 3, overflow: "hidden" }}>
           <div style={{ height: "100%", width: `${(gfgSolved/500)*100}%`, background: "#2f8d46", borderRadius: 3 }} />
+        </div>
+
+        {/* ✅ Difficulty breakdown grid added here */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 10,
+          marginTop: 16
+        }}>
+          {[
+            { label: "Easy",   count: gfgEasy,   color: "#2f8d46" },
+            { label: "Medium", count: gfgMedium,  color: "#ffa116" },
+            { label: "Hard",   count: gfgHard,    color: "#e5363d" },
+            { label: "Basic",  count: gfgBasic,   color: "#3b82f6" },
+          ].map(item => (
+            <div
+              key={item.label}
+              style={{
+                padding: "10px 8px",
+                borderRadius: 8,
+                border: `1px solid ${item.color}25`,
+                background: `${item.color}10`,
+                textAlign: "center"
+              }}
+            >
+              <p style={{ fontSize: 18, fontWeight: 700, color: item.color, marginBottom: 2 }}>
+                {item.count}
+              </p>
+              <p style={{ fontSize: 11, color: C.muted }}>
+                {item.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
