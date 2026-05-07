@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Pfp from "./real.jpeg";
-import resume from "./myresume.pdf";
+import resume from "./Resume.pdf";
 import {
   Code2 as Github, Link as Linkedin, Mail,
   Layers, Database, Server, Globe, FlaskConical, ScanLine,
@@ -521,7 +521,7 @@ function Resume() {
             <p style={{ fontSize: 14, fontWeight: 600 }}>Want the full picture?</p>
             <p style={{ fontSize: 13, color: C.muted }}>Download my resume as a PDF</p>
           </div>
-          <a href="/resume.pdf" download className="btn btn-p" style={{ fontSize: 14 }}>↓ Download Resume</a>
+          <a href={resume} download className="btn btn-p" style={{ fontSize: 14 }}>↓ Download Resume</a>
         </div>
       </div>
 
