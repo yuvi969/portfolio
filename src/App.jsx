@@ -227,7 +227,7 @@ function Profile() {
     zIndex: 1,
     objectFit: "cover",
 
-    objectPosition: "60% 25%", // move image right
+    objectPosition: "40% 25%", // move image right
     transform: "scale(1.35)",  // slightly more zoom
 
     flexShrink: 0,
