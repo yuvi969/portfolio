@@ -214,22 +214,25 @@ function Profile() {
         {/* Avatar row: avatar floats up, buttons sit to the right */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
           {/* Avatar — negative margin pulls it up over the banner */}
-          <img
-            src={Pfp}
-            alt="Yuvraj Pawar"
-            style={{
-              width: 128, height: 128, borderRadius: "50%",
-              border: "4px solid #fff",
-              marginTop: -56,
-               position: "relative", // ✅ add
-               zIndex: 1, 
-              objectFit: "cover",
-              objectPosition: "center 15%",
-              flexShrink: 0,
-              boxShadow: "0 0 0 1px rgba(0,0,0,0.08)",
-              display: "block",
-            }}
-          />
+              <img
+      src={Pfp}
+      alt="Yuvraj Pawar"
+      style={{
+        width: 128,
+        height: 128,
+        borderRadius: "50%",
+        border: "4px solid #fff",
+        marginTop: -56,
+        position: "relative",
+        zIndex: 1,
+        objectFit: "cover",
+        objectPosition: "center 25%",
+        transform: "scale(1.25)",
+        flexShrink: 0,
+        boxShadow: "0 0 0 1px rgba(0,0,0,0.08)",
+        display: "block",
+      }}
+    />
 
           {/* Action buttons — aligned to top right */}
           <div style={{ display: "flex", gap: 8, paddingTop: 16 }}>
