@@ -293,7 +293,7 @@ function About() {
       <div className="sec">
         <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>About</h2>
         <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.7 }}>
-         Hey! I'm a CS student who loves exploring new tech and learning out how things work. Right now, I'm focused on leveling up my DSA skills and diving into full-stack development. I also have a big interest in machine learning and love learning how different ML concepts work under the hood. :-)
+         Hey! I'm a CS student who loves exploring new tech.Right now, I'm focused on leveling up my DSA skills and learning more about full-stack development. I also have a intrest in machine learning and like learning how different ML concepts work. :-)
         </p>
         
       </div>
