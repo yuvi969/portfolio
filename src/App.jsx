@@ -588,16 +588,21 @@ function Resume() {
   <p style={{ fontSize: 13, fontWeight: 700, color: C.muted, letterSpacing: 1, marginBottom: 14, textTransform: "uppercase" }}>Education</p>
   
   {/* Diploma */}
-  <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 20 }}>
-    <div style={{ width: 44, height: 44, borderRadius: 8, background: "rgba(10,102,194,0.08)", border: "1px solid rgba(10,102,194,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <GraduationCap size={20} color={C.blue} />
-    </div>
-    <div>
-      <h3 style={{ fontSize: 15, fontWeight: 700 }}>Diploma in Computer Science</h3>
-      <p style={{ fontSize: 14, color: C.muted }}>2023 – 2026</p>
-      <p style={{ fontSize: 13, color: C.faint, marginTop: 4 }}>Data Structures · DBMS · OS · Computer Networks · Software Engineering</p>
-    </div>
+<div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 20 }}>
+  <div style={{ width: 44, height: 44, borderRadius: 8, background: "rgba(10,102,194,0.08)", border: "1px solid rgba(10,102,194,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+    <GraduationCap size={20} color={C.blue} />
   </div>
+  <div>
+    <h3 style={{ fontSize: 15, fontWeight: 700 }}>Diploma in Computer Science</h3>
+    <p style={{ fontSize: 14, color: C.muted }}>2023 – 2026</p>
+    <p style={{ fontSize: 13, color: C.faint, marginTop: 4 }}>
+      Applied Machine Learning · Cloud Computing · Software Engineering · Mobile App Development · Backend (Node.js/Express) · Capstone Project
+    </p>
+    <p style={{ fontSize: 13, fontWeight: 600, color: C.blue, marginTop: 4 }}>
+      CGPA: 8.24 / 10
+    </p>
+  </div>
+</div>
 
   {/* Divider */}
   <div style={{ borderLeft: `2px solid ${C.border}`, marginLeft: 21, height: 16, marginBottom: 20 }}/>
@@ -609,7 +614,7 @@ function Resume() {
     </div>
     <div>
       <h3 style={{ fontSize: 15, fontWeight: 700 }}>B.Tech in Computer Science</h3>
-      <p style={{ fontSize: 14, color: C.muted }}>2026 – 2029 · Upcoming</p>
+      <p style={{ fontSize: 14, color: C.muted }}>2026 – 2029 </p>
       <p style={{ fontSize: 13, color: C.faint, marginTop: 4 }}>Lateral entry after Diploma</p>
     </div>
   </div>
