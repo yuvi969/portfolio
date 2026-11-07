@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Pfp from "./real.jpeg";
+import Pfp from "./real.png";
 import resume from "./Resume.pdf";
 import {
   Code2 as Github, Link as Linkedin, Mail,
