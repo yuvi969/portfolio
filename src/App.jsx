@@ -327,7 +327,7 @@ const COMMANDS = {
     "mudraverse  (in progress)",
   ],
   skills: [
-    "languages : JavaScript, Python, C++, Java",
+    "languages : C++, JavaScript, Python, Java, C",
     "frontend  : React, Tailwind, HTML/CSS",
     "backend   : Node, Express, Flask, Spring Boot",
     "database  : MongoDB, PostgreSQL",
@@ -447,7 +447,7 @@ function Resume() {
         {[
           { color: C.green,  label: "GFG Coding Score 759",              sub: "GeeksForGeeks" },
           { color: C.orange, label: "320+ Problems Solved",              sub: "GFG and LeetCode combined" },
-          { color: C.purple, label: "Paper accepted at ICUBEA 2026",     sub: "Railway Fault Detection research" },
+          { color: C.purple, label: "Paper accepted at ICCUBEA 2026",     sub: "Railway Fault Detection research" },
           { color: C.blue,   label: "Top 25 at PCCOE Hackathon",         sub: "Out of 300 teams" },
         ].map(a => (
           <div key={a.label} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 12 }}>
@@ -497,52 +497,54 @@ function Resume() {
 }
 
 // ─── PROJECTS ────────────────────────────────────────────────────────────────
+
 const PROJECTS = [
   {
     icon: Stethoscope,
     title: "Clinic Appointment & Queue Management",
-    subtitle: "Appointment booking for clinics",
-    desc: "Handles appointment booking and the waiting queue for a clinic. Booking is transactional, patients log in with JWT, and the queue updates in real time over Socket.IO.",
+    subtitle: "Full-stack healthcare management system",
+    desc: "A clinic management platform for booking appointments and managing patient queues. Uses PostgreSQL transactions to prevent double-booking, JWT-based authentication, and Socket.IO for real-time queue updates.",
     tech: ["React", "Node.js", "Express", "PostgreSQL", "JWT", "Socket.IO"],
   },
   {
     icon: Train,
     title: "Railway Fault Detection",
-    subtitle: "Research paper · ICUBEA 2026",
-    desc: "Research on finding railway surface faults automatically. Compares image classification and object detection, uses Grad-CAM to see what the model looks at, and GANs for data augmentation.",
-    tech: ["Python", "ResNet18", "YOLOv8", "Grad-CAM", "GAN"],
+    subtitle: "IEEE Research Paper · ICCUBEA 2026",
+    desc: "Comparative study of deep-learning approaches for automated railway track fault inspection. Implements ResNet18 for image-level fault classification and YOLOv8 for detecting and localizing damaged regions using bounding boxes. Evaluates detection performance on railway track and structural crack datasets.",
+    tech: ["Python", "ResNet18", "YOLOv8", "Deep Learning", "Computer Vision"],
   },
   {
     icon: Leaf,
     title: "EcoSimple",
-    subtitle: "Environmental tech project",
-    desc: "A project about making environmental information easier to understand and act on.",
-    tech: ["Web Development", "Environmental Data"],
+    subtitle: "Environmental awareness platform",
+    desc: "An environmental dashboard designed to make pollution data easier to understand. Features an interactive Pune AQI map, pollution visualizations, and a carbon footprint calculator to help users understand their environmental impact.",
+    tech: ["React", "Vite", "Tailwind CSS", "React Leaflet", "Recharts"],
   },
   {
     icon: ScanLine,
     title: "Answer Sheet Rechecking Tool",
     subtitle: "AI-powered answer sheet evaluation",
     github: "https://github.com/AniketBankar2004/Answer_Sheet_Evaluation",
-    desc: "Uses OCR and Groq LLM to extract handwritten answers via OpenCV and score them through LLM reasoning. Full pipeline from image input to structured feedback.",
-    tech: ["Python", "OpenCV", "Groq API", "Node.js", "React"],
+    desc: "An automated answer-sheet evaluation pipeline that processes handwritten responses using OpenCV and OCR, then leverages Groq-hosted LLMs to evaluate answers and generate structured feedback.",
+    tech: ["Python", "OpenCV", "OCR", "Groq API", "React", "Node.js"],
   },
   {
     icon: FlaskConical,
     title: "Generic Medicine Recommender",
-    subtitle: "Cost-effective medicine alternatives",
+    subtitle: "Affordable medicine alternatives",
     github: "https://github.com/yuvi969/PCCOEHACKATHON",
-    desc: "Recommends generic alternatives to branded medicines by comparing composition, efficacy data, and pricing through a REST API backend.",
-    tech: ["Node.js", "Express", "MongoDB", "React"],
+    desc: "A medicine recommendation platform that helps users discover lower-cost generic alternatives to branded medicines by comparing medicine names, compositions, and available pricing.",
+    tech: ["React", "Node.js", "Express", "MongoDB", "REST API"],
   },
   {
     icon: Cpu,
     title: "Smart Lock using Keypad",
-    subtitle: "Microprocessor & Microcontroller subject project",
-    desc: "A keypad-based smart lock built for my Microprocessor & Microcontroller subject. A 4x4 keypad connects to an 8051 microcontroller, with two LEDs and a buzzer for feedback.",
-    tech: ["8051", "Embedded", "4x4 Keypad", "LEDs", "Buzzer"],
+    subtitle: "Microprocessor & Microcontroller project",
+    desc: "An embedded security system built around the 8051 microcontroller. Uses a 4x4 matrix keypad for password input, with LED indicators and a buzzer to provide access-status and feedback.",
+    tech: ["8051 Microcontroller", "Embedded C", "4x4 Keypad", "LEDs", "Buzzer"],
   },
 ];
+
 
 function Projects() {
   const C = useC();
