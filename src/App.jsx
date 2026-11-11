@@ -1,143 +1,163 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 import Pfp from "./real.png";
 import resume from "./Resume.pdf";
 import {
   Code2 as Github, Link as Linkedin, Mail,
   Layers, Globe, Brain, Target, BarChart3,
   MapPin, Briefcase, GraduationCap, Award, Download,
-  ScanLine, FlaskConical, Leaf, Train, Stethoscope, Hammer,
+  ScanLine, FlaskConical, Leaf, Train, Stethoscope, Hammer, Cpu,
+  Sun, Moon,
 } from "lucide-react";
 
-// ─── TOKENS ──────────────────────────────────────────────────────────────────
-const C = {
-  bg: "#14151c",
-  card: "#1b1d27",
-  bar: "#232635",
-  text: "#d9dcec",
-  muted: "#8e94b0",
-  faint: "#5d6382",
-  border: "#2e3246",
-  divider: "#262a3b",
-  pink: "#ff7eb6",
-  pinkHover: "#ff9cc7",
-  cyan: "#6fd8f0",
-  purple: "#b794f6",
-  green: "#7ee787",
-  orange: "#ffb366",
-  red: "#ff6b7a",
-  font: "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  mono: "'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace",
+// ─── TOKENS (light + dark) ───────────────────────────────────────────────────
+const FONTS = {
+  font: "'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  mono: "'Source Code Pro', ui-monospace, Menlo, Consolas, monospace",
 };
 
+const THEMES = {
+  light: {
+    ...FONTS,
+    bg: "#f4f6f5", card: "#ffffff", bar: "#f6f9f7",
+    text: "#273239", heading: "#1f2b31", muted: "#5c6a72", faint: "#8b979e",
+    border: "#dfe5e2", divider: "#eaefec",
+    green: "#2f8d46", greenDark: "#1f6b34", greenSoft: "#eaf6ed", greenInk: "#1f6b34", btnText: "#ffffff",
+    blue: "#1a73c7", purple: "#7b4fd0", orange: "#d98200", yellow: "#e89b00", red: "#e5363d", teal: "#0f8a8a",
+    chip: "#f1f5f3", chipText: "#3f4d55", hover: "#f7fbf8", scroll: "#c9d3ce", shadow: "rgba(31,43,49,0.04)",
+    footer: "#1f2d27", footerText: "#b7c5bd", footerFaint: "#8da096",
+    termBg: "#222d33", termText: "#e6edf0", termMuted: "#9db0b8", termPrompt: "#6fe08a",
+  },
+  dark: {
+    ...FONTS,
+    bg: "#101518", card: "#182024", bar: "#1d262b",
+    text: "#dbe3e7", heading: "#f2f6f8", muted: "#9aa9b1", faint: "#6d7c85",
+    border: "#2a353b", divider: "#222c31",
+    green: "#3da85a", greenDark: "#2f8d46", greenSoft: "#1b2d22", greenInk: "#6fe08a", btnText: "#08140c",
+    blue: "#5aa9f0", purple: "#ab8cf2", orange: "#f0a53a", yellow: "#f5b73a", red: "#ff6b72", teal: "#3cc0c0",
+    chip: "#222c32", chipText: "#c3ced4", hover: "#1c262b", scroll: "#34404a", shadow: "rgba(0,0,0,0.3)",
+    footer: "#0c1114", footerText: "#9fb0a8", footerFaint: "#6f8279",
+    termBg: "#0d1215", termText: "#e6edf0", termMuted: "#8fa2ab", termPrompt: "#6fe08a",
+  },
+};
+
+const ThemeCtx = createContext(THEMES.light);
+const useC = () => useContext(ThemeCtx);
+
 // ─── GLOBAL STYLES ────────────────────────────────────────────────────────────
-const GlobalStyle = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+const GlobalStyle = () => {
+  const C = useC();
+  return (
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap');
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-    body {
-      background: ${C.bg};
-      color: ${C.text};
-      font-family: ${C.font};
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-      text-align: left;
-      min-width: 320px;
-    }
-    a { text-decoration: none; color: inherit; }
-    h1, h2, h3, h4 { text-align: left; color: #fff; }
-    p { text-align: left; }
-    ::selection { background: ${C.pink}; color: #14151c; }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: ${C.bg}; }
-    ::-webkit-scrollbar-thumb { background: #2b2f45; border-radius: 4px; }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+      body {
+        background: ${C.bg};
+        color: ${C.text};
+        font-family: ${C.font};
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        text-align: left;
+        min-width: 320px;
+      }
+      body, .card, .bar, .badge, .btn, nav { transition: background-color 0.25s, border-color 0.25s, color 0.25s; }
+      a { text-decoration: none; color: inherit; }
+      h1, h2, h3, h4 { text-align: left; color: ${C.heading}; font-family: ${C.font}; }
+      p { text-align: left; }
+      ::selection { background: ${C.green}; color: ${C.btnText}; }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: ${C.bg}; }
+      ::-webkit-scrollbar-thumb { background: ${C.scroll}; border-radius: 4px; }
 
-    .card {
-      background: ${C.card};
-      border: 1px solid ${C.border};
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .bar {
-      display: flex; align-items: center; gap: 14px;
-      padding: 9px 14px; background: ${C.bar};
-      border-bottom: 1px solid ${C.border};
-      font-family: ${C.mono}; font-size: 12px; color: ${C.muted};
-    }
-    .dots { display: flex; gap: 6px; }
-    .dots i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f58; display: block; }
-    .card:hover .dots i:nth-child(1) { background: ${C.red}; }
-    .card:hover .dots i:nth-child(2) { background: ${C.orange}; }
-    .card:hover .dots i:nth-child(3) { background: ${C.green}; }
-    .dots i { transition: background 0.25s; }
+      .card {
+        background: ${C.card};
+        border: 1px solid ${C.border};
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 2px ${C.shadow};
+      }
+      .bar {
+        display: flex; align-items: center; gap: 10px;
+        padding: 9px 16px; background: ${C.bar};
+        border-bottom: 1px solid ${C.border};
+        font-family: ${C.mono}; font-size: 12px; color: ${C.muted};
+      }
+      .bar .sq { width: 8px; height: 8px; border-radius: 2px; background: ${C.green}; display: block; }
 
-    .sec { padding: 20px 24px; border-bottom: 1px solid ${C.divider}; }
-    .sec:last-child { border-bottom: none; }
+      .sec { padding: 20px 24px; border-bottom: 1px solid ${C.divider}; }
+      .sec:last-child { border-bottom: none; }
+      .sec > h2 { border-left: 4px solid ${C.green}; padding-left: 10px; }
 
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      border-radius: 6px; padding: 7px 15px;
-      font-size: 14px; font-weight: 500; cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-      font-family: ${C.font};
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-p { background: ${C.pink}; color: #14151c; border: 1px solid ${C.pink}; font-weight: 600; }
-    .btn-p:hover { background: ${C.pinkHover}; }
-    .btn-s { background: transparent; color: ${C.text}; border: 1px solid ${C.border}; }
-    .btn-s:hover { border-color: ${C.cyan}; color: ${C.cyan}; }
-    .btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid ${C.cyan}; outline-offset: 2px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        border-radius: 6px; padding: 7px 16px;
+        font-size: 14px; font-weight: 700; cursor: pointer;
+        font-family: ${C.font};
+      }
+      .btn-p { background: ${C.green}; color: ${C.btnText}; border: 1px solid ${C.green}; }
+      .btn-p:hover { background: ${C.greenDark}; border-color: ${C.greenDark}; }
+      .btn-s { background: ${C.card}; color: ${C.green}; border: 1px solid ${C.green}; }
+      .btn-s:hover { background: ${C.greenSoft}; }
+      .btn:focus-visible, a:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid ${C.green}; outline-offset: 2px; }
 
-    .badge {
-      display: inline-block; padding: 2px 10px;
-      font-family: ${C.mono}; font-size: 12px;
-      border: 1px solid ${C.border}; border-radius: 4px;
-      margin: 3px 6px 3px 0; color: ${C.muted};
-    }
+      .icon-btn {
+        width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
+        background: transparent; color: ${C.text}; border: 1px solid ${C.border}; border-radius: 6px; cursor: pointer;
+      }
+      .icon-btn:hover { border-color: ${C.green}; color: ${C.green}; }
 
-    .nav-item {
-      display: flex; align-items: center; gap: 6px;
-      color: ${C.muted}; font-size: 13px; padding: 4px 11px;
-      cursor: pointer; transition: color 0.15s;
-    }
-    .nav-item:hover { color: ${C.cyan}; }
+      .badge {
+        display: inline-block; padding: 2px 11px;
+        font-size: 12.5px; font-weight: 600;
+        background: ${C.chip}; border: 1px solid ${C.border}; border-radius: 14px;
+        margin: 3px 6px 3px 0; color: ${C.chipText};
+      }
 
-    .row { border-left: 2px solid transparent; transition: background 0.15s, border-color 0.15s; }
-    .row:hover { background: rgba(255,255,255,0.02); border-left-color: ${C.pink}; }
+      .nav-item {
+        display: flex; align-items: center; gap: 6px; height: 54px;
+        color: ${C.text}; font-size: 14px; font-weight: 600; padding: 0 12px;
+        cursor: pointer; border-bottom: 3px solid transparent;
+      }
+      .nav-item:hover { color: ${C.green}; border-bottom-color: ${C.green}; }
 
-    .cursor {
-      display: inline-block; width: 9px; height: 1.05em; margin-left: 3px;
-      background: ${C.pink}; vertical-align: -3px;
-      animation: blink 1.05s steps(2, start) infinite;
-    }
-    @keyframes blink { to { visibility: hidden; } }
+      .row { border-left: 3px solid transparent; transition: background 0.15s, border-color 0.15s; }
+      .row:hover { background: ${C.hover}; border-left-color: ${C.green}; }
 
-    .term-input {
-      flex: 1; min-width: 0; background: transparent; border: none; outline: none;
-      color: ${C.text}; font-family: ${C.mono}; font-size: 13px; caret-color: ${C.pink};
-    }
+      .cursor {
+        display: inline-block; width: 8px; height: 1.05em; margin-left: 3px;
+        background: ${C.green}; vertical-align: -3px;
+        animation: blink 1.05s steps(2, start) infinite;
+      }
+      @keyframes blink { to { visibility: hidden; } }
 
-    @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr !important; }
-      .hide-mob { display: none !important; }
-      .sidebar-sticky { position: static !important; }
-      .sec { padding: 18px 16px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation: none !important; }
-    }
-  `}</style>
-);
+      .term-input {
+        flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+        color: ${C.termText}; font-family: ${C.mono}; font-size: 13px; caret-color: ${C.termPrompt};
+      }
+
+      @media (max-width: 860px) {
+        .layout { grid-template-columns: 1fr !important; }
+        .hide-mob { display: none !important; }
+        .sidebar-sticky { position: static !important; }
+        .sec { padding: 18px 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation: none !important; }
+      }
+    `}</style>
+  );
+};
 
 // ─── SMALL HELPERS ───────────────────────────────────────────────────────────
-// A "window": title bar with a filename, then the content
-function Win({ id, file, children }) {
+// A "window": header strip with a filename, then the content
+function Win({ id, file, children, accent }) {
+  const C = useC();
   return (
-    <section className="card" id={id}>
+    <section className="card" id={id} style={accent ? { borderTop: `4px solid ${C.green}` } : undefined}>
       <div className="bar">
-        <span className="dots"><i /><i /><i /></span>
+        <span className="sq" />
         <span>{file}</span>
       </div>
       {children}
@@ -157,14 +177,15 @@ function Typed({ text }) {
   return <>{text.slice(0, n)}<span className="cursor" /></>;
 }
 
-const tagColor = (color) => ({ color, borderColor: `${color}55` });
+const tagColor = (color) => ({ color, background: `${color}14`, borderColor: `${color}44` });
 
 // ─── NAV ─────────────────────────────────────────────────────────────────────
-function Nav() {
+function Nav({ mode, onToggle }) {
+  const C = useC();
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      background: "rgba(20,21,28,0.9)", backdropFilter: "blur(14px)",
+      background: C.card,
       borderBottom: `1px solid ${C.border}`,
       height: 54, display: "flex", alignItems: "center", justifyContent: "center",
     }}>
@@ -174,12 +195,12 @@ function Nav() {
       }}>
         <a href="#top" style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{
-            width: 32, height: 32, borderRadius: 6, background: C.pink, color: "#14151c",
+            width: 32, height: 32, borderRadius: 6, background: C.green, color: C.btnText,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontFamily: C.mono, fontWeight: 700, fontSize: 16,
+            fontWeight: 800, fontSize: 18,
           }}>Y</span>
-          <span className="hide-mob" style={{ fontFamily: C.mono, fontSize: 14, fontWeight: 500 }}>
-            Yuvraj<span style={{ color: C.pink }}>.</span>
+          <span className="hide-mob" style={{ fontSize: 20, fontWeight: 800, color: C.green, letterSpacing: "-0.01em" }}>
+            Yuvraj<span style={{ color: C.heading }}>.</span>
           </span>
         </a>
 
@@ -199,9 +220,20 @@ function Nav() {
           ))}
         </div>
 
-        <a href="mailto:pawaryuvraj334@gmail.com" className="btn btn-p" style={{ fontSize: 13, padding: "5px 14px" }}>
-          <Mail size={14} /> Hire Me
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={onToggle}
+            aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={mode === "dark" ? "Light mode" : "Dark mode"}
+          >
+            {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <a href="mailto:pawaryuvraj334@gmail.com" className="btn btn-p" style={{ fontSize: 13, padding: "5px 14px" }}>
+            <Mail size={14} /> Hire Me
+          </a>
+        </div>
       </div>
     </nav>
   );
@@ -209,14 +241,15 @@ function Nav() {
 
 // ─── PROFILE ─────────────────────────────────────────────────────────────────
 function Profile() {
+  const C = useC();
   return (
-    <Win id="top" file="~/yuvraj — whoami">
+    <Win id="top" file="~/yuvraj — profile" accent>
       <div style={{ padding: "26px 24px 24px" }}>
         <div style={{ display: "flex", gap: 22, alignItems: "center", flexWrap: "wrap" }}>
-          {/* Avatar: circle crop, image zoomed inside it */}
+          {/* Avatar: circle crop */}
           <div style={{
             width: 112, height: 112, borderRadius: "50%", overflow: "hidden", flexShrink: 0,
-            border: `2px solid ${C.pink}`, boxShadow: `0 0 0 5px ${C.card}, 0 0 0 6px ${C.border}`,
+            border: `3px solid ${C.green}`, boxShadow: `0 0 0 4px ${C.greenSoft}`,
           }}>
             <img
               src={Pfp}
@@ -229,19 +262,19 @@ function Profile() {
           </div>
 
           <div style={{ flex: 1, minWidth: 240 }}>
-            <h1 style={{ fontFamily: C.mono, fontSize: 28, fontWeight: 700, letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em" }}>
               Yuvraj Pawar
             </h1>
-            <p style={{ fontFamily: C.mono, fontSize: 14, color: C.cyan, marginTop: 6, minHeight: 22 }}>
+            <p style={{ fontSize: 16, fontWeight: 600, color: C.green, marginTop: 4, minHeight: 24 }}>
               <Typed text="Computer Science Student · Building Software Systems" />
             </p>
-            <p style={{ fontSize: 14, color: C.muted, marginTop: 6 }}>
+            <p style={{ fontSize: 14, color: C.muted, marginTop: 4 }}>
               Systems · AI Integration · Full-Stack Development · DSA
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
               <MapPin size={13} color={C.muted} />
               <span style={{ fontSize: 13, color: C.muted }}>Pune, India</span>
-              <span style={{ fontSize: 13, fontWeight: 500, color: C.green, marginLeft: 4 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: C.green, marginLeft: 4 }}>
                 · Available for opportunities
               </span>
             </div>
@@ -254,18 +287,19 @@ function Profile() {
           <a href={resume} download className="btn btn-s"><Download size={14} /> Resume</a>
         </div>
 
-        <div style={{
-          display: "flex", gap: 32, marginTop: 22, paddingTop: 18,
-          borderTop: `1px solid ${C.divider}`, flexWrap: "wrap",
-        }}>
+        {/* stat tiles, like the GFG profile page */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12, marginTop: 22 }}>
           {[
-            { label: "Projects",        value: "5+",   color: C.cyan   },
-            { label: "Problems Solved", value: "320+", color: C.orange },
-            { label: "GFG Score",       value: "759",  color: C.green  },
+            { label: "Projects",        value: "5+"   },
+            { label: "Problems Solved", value: "320+" },
+            { label: "GFG Score",       value: "759"  },
           ].map(s => (
-            <div key={s.label}>
-              <p style={{ fontFamily: C.mono, fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</p>
-              <p style={{ fontSize: 12, color: C.muted }}>{s.label}</p>
+            <div key={s.label} style={{
+              padding: "12px 16px", borderRadius: 8, background: C.greenSoft,
+              border: `1px solid ${C.green}30`,
+            }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: C.muted }}>{s.label}</p>
+              <p style={{ fontSize: 24, fontWeight: 800, color: C.greenInk, lineHeight: 1.2 }}>{s.value}</p>
             </div>
           ))}
         </div>
@@ -289,6 +323,7 @@ const COMMANDS = {
     "ecosimple",
     "answer-sheet-rechecking-tool",
     "generic-medicine-recommender",
+    "smart-lock-8051",
     "mudraverse  (in progress)",
   ],
   skills: [
@@ -305,6 +340,7 @@ const COMMANDS = {
 };
 
 function Terminal() {
+  const C = useC();
   const [lines, setLines] = useState([{ t: "out", v: "hey, you found the terminal. type 'help' :)" }]);
   const [val, setVal] = useState("");
   const boxRef = useRef(null);
@@ -335,17 +371,17 @@ function Terminal() {
         onClick={() => inputRef.current && inputRef.current.focus()}
         style={{
           padding: "14px 18px", height: 190, overflowY: "auto", cursor: "text",
-          fontFamily: C.mono, fontSize: 13, lineHeight: 1.7, background: "#161822",
+          fontFamily: C.mono, fontSize: 13, lineHeight: 1.7, background: C.termBg,
         }}
       >
         {lines.map((l, i) => (
-          <div key={i} style={{ color: l.t === "in" ? C.text : C.muted, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-            {l.t === "in" && <span style={{ color: C.pink }}>~ $ </span>}
+          <div key={i} style={{ color: l.t === "in" ? C.termText : C.termMuted, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+            {l.t === "in" && <span style={{ color: C.termPrompt }}>~ $ </span>}
             {l.v}
           </div>
         ))}
         <form onSubmit={run} style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ color: C.pink, whiteSpace: "pre" }}>~ $ </span>
+          <span style={{ color: C.termPrompt, whiteSpace: "pre" }}>~ $ </span>
           <input
             ref={inputRef}
             className="term-input"
@@ -364,10 +400,11 @@ function Terminal() {
 
 // ─── ABOUT ────────────────────────────────────────────────────────────────────
 function About() {
+  const C = useC();
   return (
     <Win id="about" file="about.md">
       <div className="sec">
-        <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>About</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 14 }}>About</h2>
         <p style={{ fontSize: 15, color: C.muted, lineHeight: 1.75, maxWidth: 680 }}>
           Hey there! I'm a Computer Science student who enjoys learning about computers, networks,
           and new technologies. Over the past few years, I've worked on a bunch of development
@@ -388,16 +425,17 @@ function About() {
 
 // ─── RESUME ───────────────────────────────────────────────────────────────────
 function Resume() {
+  const C = useC();
   return (
     <Win id="resume" file="resume.pdf">
       <div className="sec">
         <div style={{
-          padding: "14px 16px", background: "rgba(255,126,182,0.05)",
-          border: `1px dashed ${C.pink}66`, borderRadius: 6,
+          padding: "14px 16px", background: C.greenSoft,
+          border: `1px dashed ${C.green}80`, borderRadius: 8,
           display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12,
         }}>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}>Want the full picture?</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: C.heading }}>Want the full picture?</p>
             <p style={{ fontSize: 13, color: C.muted }}>Download my resume as a PDF</p>
           </div>
           <a href={resume} download className="btn btn-p"><Download size={14} /> Download Resume</a>
@@ -405,17 +443,17 @@ function Resume() {
       </div>
 
       <div className="sec">
-        <p style={{ fontFamily: C.mono, fontSize: 12, color: C.faint, marginBottom: 14 }}>// highlights</p>
+        <p style={{ fontSize: 13, fontWeight: 700, color: C.faint, marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.06em" }}>Highlights</p>
         {[
           { color: C.green,  label: "GFG Coding Score 759",              sub: "GeeksForGeeks" },
           { color: C.orange, label: "320+ Problems Solved",              sub: "GFG and LeetCode combined" },
           { color: C.purple, label: "Paper accepted at ICUBEA 2026",     sub: "Railway Fault Detection research" },
-          { color: C.cyan,   label: "Top 25 at PCCOE Hackathon",         sub: "Out of 300 teams" },
+          { color: C.blue,   label: "Top 25 at PCCOE Hackathon",         sub: "Out of 300 teams" },
         ].map(a => (
           <div key={a.label} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 12 }}>
-            <div style={{ width: 8, height: 8, borderRadius: 2, background: a.color, marginTop: 7, flexShrink: 0 }} />
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: a.color, marginTop: 7, flexShrink: 0 }} />
             <div>
-              <p style={{ fontSize: 14, fontWeight: 500, color: "#fff" }}>{a.label}</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: C.heading }}>{a.label}</p>
               <p style={{ fontSize: 13, color: C.muted }}>{a.sub}</p>
             </div>
           </div>
@@ -423,20 +461,20 @@ function Resume() {
       </div>
 
       <div className="sec">
-        <p style={{ fontFamily: C.mono, fontSize: 12, color: C.faint, marginBottom: 14 }}>// education</p>
+        <p style={{ fontSize: 13, fontWeight: 700, color: C.faint, marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.06em" }}>Education</p>
 
         {/* Diploma */}
         <div style={{ display: "flex", gap: 16, alignItems: "flex-start", marginBottom: 20 }}>
-          <div style={{ width: 42, height: 42, borderRadius: 6, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <GraduationCap size={19} color={C.cyan} />
+          <div style={{ width: 42, height: 42, borderRadius: 8, background: C.greenSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <GraduationCap size={19} color={C.green} />
           </div>
           <div>
-            <h3 style={{ fontSize: 15, fontWeight: 600 }}>Diploma in Computer Science</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 700 }}>Diploma in Computer Science</h3>
             <p style={{ fontSize: 14, color: C.muted }}>2023 – 2026</p>
             <p style={{ fontSize: 13, color: C.faint, marginTop: 4 }}>
               Applied Machine Learning · Cloud Computing · Software Engineering · Mobile App Development · Backend (Node.js/Express) · Capstone Project
             </p>
-            <p style={{ fontFamily: C.mono, fontSize: 13, color: C.green, marginTop: 4 }}>CGPA: 8.24 / 10</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: C.green, marginTop: 4 }}>CGPA: 8.24 / 10</p>
           </div>
         </div>
 
@@ -444,11 +482,11 @@ function Resume() {
 
         {/* B.Tech */}
         <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-          <div style={{ width: 42, height: 42, borderRadius: 6, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <GraduationCap size={19} color={C.cyan} />
+          <div style={{ width: 42, height: 42, borderRadius: 8, background: C.greenSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <GraduationCap size={19} color={C.green} />
           </div>
           <div>
-            <h3 style={{ fontSize: 15, fontWeight: 600 }}>B.Tech in Computer Science</h3>
+            <h3 style={{ fontSize: 15, fontWeight: 700 }}>B.Tech in Computer Science</h3>
             <p style={{ fontSize: 14, color: C.muted }}>2026 – 2029</p>
             <p style={{ fontSize: 13, color: C.faint, marginTop: 4 }}>Lateral entry after Diploma</p>
           </div>
@@ -497,27 +535,35 @@ const PROJECTS = [
     desc: "Recommends generic alternatives to branded medicines by comparing composition, efficacy data, and pricing through a REST API backend.",
     tech: ["Node.js", "Express", "MongoDB", "React"],
   },
+  {
+    icon: Cpu,
+    title: "Smart Lock using Keypad",
+    subtitle: "Microprocessor & Microcontroller subject project",
+    desc: "A keypad-based smart lock built for my Microprocessor & Microcontroller subject. A 4x4 keypad connects to an 8051 microcontroller, with two LEDs and a buzzer for feedback.",
+    tech: ["8051", "Embedded", "4x4 Keypad", "LEDs", "Buzzer"],
+  },
 ];
 
 function Projects() {
+  const C = useC();
   return (
     <Win id="projects" file="projects.jsx">
       <div className="sec" style={{ paddingBottom: 16 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600 }}>Featured Projects</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 800 }}>Featured Projects</h2>
       </div>
 
       {PROJECTS.map(p => (
         <div key={p.title} className="sec row" style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
           <div style={{
-            width: 42, height: 42, borderRadius: 6, border: `1px solid ${C.border}`,
+            width: 42, height: 42, borderRadius: 8, background: C.greenSoft,
             display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
           }}>
-            <p.icon size={19} color={C.pink} />
+            <p.icon size={19} color={C.green} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
               <div>
-                <h3 style={{ fontSize: 15, fontWeight: 600 }}>{p.title}</h3>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>{p.title}</h3>
                 <p style={{ fontSize: 13, color: C.muted }}>{p.subtitle}</p>
               </div>
               {p.github && (
@@ -537,15 +583,15 @@ function Projects() {
       {/* what I'm working on right now */}
       <div className="sec row" style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{
-          width: 42, height: 42, borderRadius: 6, border: `1px dashed ${C.green}88`,
+          width: 42, height: 42, borderRadius: 8, border: `1px dashed ${C.green}`,
           display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
         }}>
           <Hammer size={19} color={C.green} />
         </div>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-            <h3 style={{ fontSize: 15, fontWeight: 600 }}>MudraVerse</h3>
-            <span style={{ fontFamily: C.mono, fontSize: 11, color: C.green, border: `1px solid ${C.green}55`, borderRadius: 4, padding: "1px 8px" }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700 }}>MudraVerse</h3>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.green, background: C.greenSoft, borderRadius: 12, padding: "2px 10px" }}>
               building now
             </span>
           </div>
@@ -562,57 +608,63 @@ function Projects() {
 }
 
 // ─── HACKATHONS ───────────────────────────────────────────────────────────────
+// "ck" is a colour key, looked up in the current theme when rendering
 const HACKATHONS = [
-  { icon: Award, color: C.orange, title: "Smart India Hackathon", tag: "Top 100",  desc: "Made it to the top 100 in my college's internal selection round." },
-  { icon: Award, color: C.cyan,   title: "PCCOE Hackathon",       tag: "Top 25",   desc: "Finished in the top 25 out of 300 teams." },
-  { icon: Train, color: C.purple, title: "Railway Fault Detection", tag: "Paper accepted", desc: "Our research on railway fault detection was accepted at ICUBEA 2026." },
+  { icon: Award, ck: "orange", title: "Smart India Hackathon",   tag: "Top 100",        desc: "Made it to the top 100 in my college's internal selection round." },
+  { icon: Award, ck: "blue",   title: "PCCOE Hackathon",         tag: "Top 25",         desc: "Finished in the top 25 out of 300 teams." },
+  { icon: Train, ck: "purple", title: "Railway Fault Detection", tag: "Paper accepted", desc: "Our research on railway fault detection was accepted at ICUBEA 2026." },
 ];
 
 function Hackathons() {
+  const C = useC();
   return (
     <Win id="hackathons" file="hackathons.log">
       <div className="sec" style={{ paddingBottom: 16 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600 }}>Hackathons & Research</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 800 }}>Hackathons & Research</h2>
       </div>
-      {HACKATHONS.map(h => (
-        <div key={h.title} className="sec row" style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-          <div style={{
-            width: 42, height: 42, borderRadius: 6, border: `1px solid ${h.color}55`,
-            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-          }}>
-            <h.icon size={19} color={h.color} />
-          </div>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <h3 style={{ fontSize: 15, fontWeight: 600 }}>{h.title}</h3>
-              <span style={{ fontFamily: C.mono, fontSize: 11, padding: "1px 8px", borderRadius: 4, color: h.color, border: `1px solid ${h.color}55` }}>{h.tag}</span>
+      {HACKATHONS.map(h => {
+        const col = C[h.ck];
+        return (
+          <div key={h.title} className="sec row" style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: 8, background: `${col}18`,
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <h.icon size={19} color={col} />
             </div>
-            <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6, marginTop: 4 }}>{h.desc}</p>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700 }}>{h.title}</h3>
+                <span style={{ fontSize: 12, fontWeight: 700, padding: "2px 10px", borderRadius: 12, color: col, background: `${col}18` }}>{h.tag}</span>
+              </div>
+              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6, marginTop: 4 }}>{h.desc}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </Win>
   );
 }
 
 // ─── TECH STACK ───────────────────────────────────────────────────────────────
 function TechStack() {
+  const C = useC();
   const STACK = [
     { label: "Languages", color: C.orange, items: ["JavaScript", "Python", "C++", "Java", "SQL"] },
-    { label: "Frontend",  color: C.cyan,   items: ["React.js", "Tailwind CSS", "HTML / CSS"] },
+    { label: "Frontend",  color: C.blue,   items: ["React.js", "Tailwind CSS", "HTML / CSS"] },
     { label: "Backend",   color: C.purple, items: ["Node.js", "Express.js", "Flask", "Spring Boot", "REST APIs", "JWT", "Socket.IO"] },
     { label: "Database",  color: C.green,  items: ["MongoDB", "PostgreSQL"] },
-    { label: "Tools",     color: C.pink,   items: ["Git", "GitHub", "Postman"] },
+    { label: "Tools",     color: C.teal,   items: ["Git", "GitHub", "Postman"] },
   ];
   return (
     <Win id="stack" file="skills.json">
       <div className="sec" style={{ paddingBottom: 16 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600 }}>Skills & Technologies</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 800 }}>Skills & Technologies</h2>
       </div>
       <div className="sec">
         {STACK.map((g, i) => (
           <div key={g.label} style={{ marginBottom: i < STACK.length - 1 ? 16 : 0 }}>
-            <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: g.color }}>{g.label}</p>
+            <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 6, color: g.color }}>{g.label}</p>
             <div>{g.items.map(t => <span key={t} className="badge" style={tagColor(g.color)}>{t}</span>)}</div>
           </div>
         ))}
@@ -623,58 +675,59 @@ function TechStack() {
 
 // ─── DSA ──────────────────────────────────────────────────────────────────────
 function DSA() {
+  const C = useC();
   const gfgSolved = 271, gfgScore = 759;
   const gfgBasic = 40, gfgEasy = 102, gfgMedium = 115, gfgHard = 14;
   const lcEasy = 23, lcMed = 24, lcHard = 3, lcTotal = 50;
   const iconBox = (color) => ({
-    width: 40, height: 40, borderRadius: 6, border: `1px solid ${color}55`,
+    width: 40, height: 40, borderRadius: 8, background: `${color}18`,
     display: "flex", alignItems: "center", justifyContent: "center",
   });
   return (
     <Win id="dsa" file="dsa.cpp">
       <div className="sec" style={{ paddingBottom: 16 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600 }}>Problem Solving</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 800 }}>Problem Solving</h2>
       </div>
 
       <div className="sec">
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
           <div style={iconBox(C.green)}><Target size={18} color={C.green} /></div>
           <div>
-            <p style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}>GeeksForGeeks</p>
+            <p style={{ fontWeight: 700, fontSize: 16, color: C.heading }}>GeeksForGeeks</p>
             <p style={{ fontSize: 13, color: C.muted }}>Coding practice platform</p>
           </div>
         </div>
         <div style={{ display: "flex", gap: 32, marginBottom: 14 }}>
           <div>
-            <p style={{ fontFamily: C.mono, fontSize: 24, fontWeight: 700, color: C.green }}>{gfgScore}</p>
+            <p style={{ fontSize: 26, fontWeight: 800, color: C.green }}>{gfgScore}</p>
             <p style={{ fontSize: 12, color: C.muted }}>Coding score</p>
           </div>
           <div>
-            <p style={{ fontFamily: C.mono, fontSize: 24, fontWeight: 700, color: "#fff" }}>{gfgSolved}</p>
+            <p style={{ fontSize: 26, fontWeight: 800, color: C.heading }}>{gfgSolved}</p>
             <p style={{ fontSize: 12, color: C.muted }}>Problems solved</p>
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
           <span style={{ fontSize: 13, color: C.muted }}>Progress</span>
-          <span style={{ fontFamily: C.mono, fontSize: 13, color: C.green }}>{Math.round((gfgSolved / 500) * 100)}%</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: C.green }}>{Math.round((gfgSolved / 500) * 100)}%</span>
         </div>
-        <div style={{ height: 6, background: C.divider, borderRadius: 3, overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${(gfgSolved / 500) * 100}%`, background: C.green, borderRadius: 3 }} />
+        <div style={{ height: 7, background: C.divider, borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${(gfgSolved / 500) * 100}%`, background: C.green, borderRadius: 4 }} />
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginTop: 16 }}>
           {[
             { label: "Easy",   count: gfgEasy,   color: C.green  },
-            { label: "Medium", count: gfgMedium, color: C.orange },
+            { label: "Medium", count: gfgMedium, color: C.yellow },
             { label: "Hard",   count: gfgHard,   color: C.red    },
-            { label: "Basic",  count: gfgBasic,  color: C.cyan   },
+            { label: "Basic",  count: gfgBasic,  color: C.blue   },
           ].map(item => (
             <div key={item.label} style={{
-              padding: "10px 8px", borderRadius: 6, textAlign: "center",
-              border: `1px solid ${item.color}33`, background: `${item.color}0f`,
+              padding: "10px 8px", borderRadius: 8, textAlign: "center",
+              border: `1px solid ${item.color}33`, background: `${item.color}12`,
             }}>
-              <p style={{ fontFamily: C.mono, fontSize: 18, fontWeight: 700, color: item.color, marginBottom: 2 }}>{item.count}</p>
-              <p style={{ fontSize: 11, color: C.muted }}>{item.label}</p>
+              <p style={{ fontSize: 20, fontWeight: 800, color: item.color, marginBottom: 2 }}>{item.count}</p>
+              <p style={{ fontSize: 12, fontWeight: 600, color: C.muted }}>{item.label}</p>
             </div>
           ))}
         </div>
@@ -682,23 +735,23 @@ function DSA() {
 
       <div className="sec">
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-          <div style={iconBox(C.orange)}><BarChart3 size={18} color={C.orange} /></div>
+          <div style={iconBox(C.yellow)}><BarChart3 size={18} color={C.yellow} /></div>
           <div>
-            <p style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}>LeetCode</p>
+            <p style={{ fontWeight: 700, fontSize: 16, color: C.heading }}>LeetCode</p>
             <p style={{ fontSize: 13, color: C.muted }}>{lcTotal} problems solved</p>
           </div>
         </div>
         {[
           { label: "Easy",   count: lcEasy, color: C.green  },
-          { label: "Medium", count: lcMed,  color: C.orange },
+          { label: "Medium", count: lcMed,  color: C.yellow },
           { label: "Hard",   count: lcHard, color: C.red    },
         ].map(b => (
           <div key={b.label} style={{ marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
               <span style={{ fontSize: 13, color: C.muted }}>{b.label}</span>
-              <span style={{ fontFamily: C.mono, fontSize: 13, color: b.color }}>{b.count}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: b.color }}>{b.count}</span>
             </div>
-            <div style={{ height: 5, background: C.divider, borderRadius: 3, overflow: "hidden" }}>
+            <div style={{ height: 6, background: C.divider, borderRadius: 3, overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${(b.count / lcTotal) * 100}%`, background: b.color, borderRadius: 3 }} />
             </div>
           </div>
@@ -707,13 +760,13 @@ function DSA() {
 
       <div className="sec">
         <div style={{
-          padding: "14px 16px", background: "rgba(111,216,240,0.05)",
-          border: `1px dashed ${C.cyan}66`, borderRadius: 6,
+          padding: "14px 16px", background: C.greenSoft,
+          border: `1px dashed ${C.green}80`, borderRadius: 8,
           display: "flex", gap: 10, alignItems: "flex-start",
         }}>
-          <Brain size={16} color={C.cyan} style={{ marginTop: 2, flexShrink: 0 }} />
+          <Brain size={16} color={C.green} style={{ marginTop: 2, flexShrink: 0 }} />
           <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: "#fff", marginBottom: 4 }}>Current focus</p>
+            <p style={{ fontSize: 14, fontWeight: 700, color: C.heading, marginBottom: 4 }}>Current focus</p>
             <p style={{ fontSize: 14, color: C.muted }}>Trees · Graphs · Dynamic Programming · System Design</p>
           </div>
         </div>
@@ -724,6 +777,7 @@ function DSA() {
 
 // ─── SIDEBAR ─────────────────────────────────────────────────────────────────
 function Sidebar() {
+  const C = useC();
   return (
     <div>
       <Win file="connect.json">
@@ -741,13 +795,13 @@ function Sidebar() {
             style={{ display: "flex", alignItems: "center", gap: 12 }}
           >
             <div style={{
-              width: 36, height: 36, borderRadius: 6, border: `1px solid ${C.border}`,
+              width: 36, height: 36, borderRadius: 8, background: C.greenSoft,
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
             }}>
-              <item.icon size={15} color={C.pink} />
+              <item.icon size={15} color={C.green} />
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 14, fontWeight: 500, color: "#fff" }}>{item.label}</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: C.heading }}>{item.label}</p>
               <p style={{ fontSize: 12, color: C.muted, overflow: "hidden", textOverflow: "ellipsis" }}>{item.sub}</p>
             </div>
           </a>
@@ -758,16 +812,16 @@ function Sidebar() {
         <div className="sec">
           {[
             { icon: GraduationCap, label: "Internships",     color: C.green  },
-            { icon: Briefcase,     label: "Full-time Roles", color: C.cyan   },
+            { icon: Briefcase,     label: "Full-time Roles", color: C.blue   },
             { icon: Github,        label: "Project Collabs", color: C.purple },
           ].map(item => (
             <div key={item.label} style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "8px 10px", borderRadius: 6,
-              background: `${item.color}12`, marginBottom: 6,
+              background: `${item.color}16`, marginBottom: 6,
             }}>
               <item.icon size={14} color={item.color} />
-              <span style={{ fontSize: 14, fontWeight: 500 }}>{item.label}</span>
+              <span style={{ fontSize: 14, fontWeight: 600 }}>{item.label}</span>
             </div>
           ))}
           <p style={{ fontSize: 12, color: C.muted, marginTop: 8 }}>I will try to respond ASAP :)</p>
@@ -779,15 +833,15 @@ function Sidebar() {
           {[
             { label: "GFG Score",    value: "759", color: C.green  },
             { label: "GFG Problems", value: "271", color: C.green  },
-            { label: "LeetCode",     value: "50",  color: C.orange },
-            { label: "Projects",     value: "5+",  color: C.cyan   },
+            { label: "LeetCode",     value: "50",  color: C.yellow },
+            { label: "Projects",     value: "5+",  color: C.blue   },
           ].map(s => (
             <div key={s.label} style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
               padding: "8px 0", borderBottom: `1px solid ${C.divider}`,
             }}>
               <span style={{ fontSize: 14, color: C.muted }}>{s.label}</span>
-              <span style={{ fontFamily: C.mono, fontSize: 14, fontWeight: 700, color: s.color }}>{s.value}</span>
+              <span style={{ fontSize: 15, fontWeight: 800, color: s.color }}>{s.value}</span>
             </div>
           ))}
         </div>
@@ -798,25 +852,23 @@ function Sidebar() {
 
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 function Footer() {
+  const C = useC();
   return (
-    <footer id="contact" style={{
-      background: "#101118", borderTop: `1px solid ${C.border}`,
-      padding: "40px 16px",
-    }}>
+    <footer id="contact" style={{ background: C.footer, padding: "40px 16px" }}>
       <div style={{
         maxWidth: 1128, margin: "0 auto",
         display: "flex", alignItems: "center", justifyContent: "space-between",
         flexWrap: "wrap", gap: 20,
       }}>
         <div>
-          <h2 style={{ fontFamily: C.mono, fontSize: 24, fontWeight: 700, marginBottom: 6 }}>
-            Let's build something<span style={{ color: C.pink }}>.</span>
+          <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 6, color: "#fff" }}>
+            Let's build something<span style={{ color: C.termPrompt }}>.</span>
           </h2>
-          <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: C.footerText, lineHeight: 1.6 }}>
             Open to internships and interesting projects.<br />
             I will respond ASAP :)
           </p>
-          <p style={{ fontFamily: C.mono, fontSize: 12, color: C.faint, marginTop: 12 }}>© 2026 Yuvraj Pawar</p>
+          <p style={{ fontSize: 12, color: C.footerFaint, marginTop: 12 }}>© 2026 Yuvraj Pawar</p>
         </div>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -831,10 +883,26 @@ function Footer() {
 
 // ─── APP ─────────────────────────────────────────────────────────────────────
 export default function App() {
+  // start from the saved choice, else the device's light/dark setting
+  const [mode, setMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") return saved;
+    } catch (e) { /* storage blocked, ignore */ }
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem("theme", mode); } catch (e) { /* ignore */ }
+    document.documentElement.style.colorScheme = mode;
+  }, [mode]);
+
+  const toggle = () => setMode(m => (m === "dark" ? "light" : "dark"));
+
   return (
-    <>
+    <ThemeCtx.Provider value={THEMES[mode]}>
       <GlobalStyle />
-      <Nav />
+      <Nav mode={mode} onToggle={toggle} />
       <div style={{ paddingTop: 54 }}>
         <div
           className="layout"
@@ -863,6 +931,6 @@ export default function App() {
         </div>
         <Footer />
       </div>
-    </>
+    </ThemeCtx.Provider>
   );
 }
